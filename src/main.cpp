@@ -1,10 +1,21 @@
 #include <iostream>
 #include <X11/Xlib.h>
 #include <unistd.h>
+#include "MouseTracker.h"
 
 int main(int argc, char ** argv) {
 
-    Display *d = XOpenDisplay(0);
+    MouseTracker* mt1 = MouseTracker::getInstance();
+    MouseTracker* mt2 = MouseTracker::getInstance();
+
+    while(true) {
+        mt1->update();
+        sleep(1);
+        std::cout << mt1->getCoordinates().x << std::endl;
+        std::cout << mt2->getCoordinates().y << std::endl;
+    }
+
+    /*Display *d = XOpenDisplay(0);
 
     if (d) {
         Window root_window;
@@ -22,7 +33,7 @@ int main(int argc, char ** argv) {
             1920, 1920
         );
         XFlush(d);
-    }
+    }*/
 
     return 0;
 }
