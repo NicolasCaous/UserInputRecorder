@@ -1,5 +1,5 @@
-#include <iostream>
-#include <unistd.h>
+#include "../include/iostream"
+#include "../include/unistd.h"
 #include "MouseTracker.h"
 
 int main(int argc, char ** argv) {
@@ -8,7 +8,6 @@ int main(int argc, char ** argv) {
     MouseTracker* mt2 = MouseTracker::getInstance();
 
     while(true) {
-        mt1->update();
         //sleep(1);
         std::cout << mt1->getCoordinates().x << std::endl;
         std::cout << mt2->getCoordinates().y << std::endl;

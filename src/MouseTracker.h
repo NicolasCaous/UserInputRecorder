@@ -8,8 +8,8 @@ class MouseTracker
     public:
         static MouseTracker* getInstance(void);
         XY getCoordinates(void);
-        void update(void);
     private:
+        void update(void);
         MouseTracker(void);
         static MouseTracker* tracker;
         XY coordinates;

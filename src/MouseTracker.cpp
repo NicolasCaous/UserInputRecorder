@@ -1,5 +1,5 @@
-#include <cstddef>
-#include <X11/Xlib.h>
+#include "../include/cstddef"
+#include "../include/X11/Xlib.h"
 #include "MouseTracker.h"
 
 MouseTracker* MouseTracker::getInstance(void)
@@ -12,6 +12,7 @@ MouseTracker* MouseTracker::getInstance(void)
 
 XY MouseTracker::getCoordinates(void)
 {
+    this->update();
     return this->coordinates;
 }
 
