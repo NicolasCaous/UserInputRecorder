@@ -1,5 +1,4 @@
 #include <iostream>
-#include <X11/Xlib.h>
 #include <unistd.h>
 #include "MouseTracker.h"
 
@@ -10,7 +9,7 @@ int main(int argc, char ** argv) {
 
     while(true) {
         mt1->update();
-        sleep(1);
+        //sleep(1);
         std::cout << mt1->getCoordinates().x << std::endl;
         std::cout << mt2->getCoordinates().y << std::endl;
     }

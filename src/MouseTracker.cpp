@@ -1,6 +1,5 @@
 #include <cstddef>
 #include <X11/Xlib.h>
-#include <unistd.h>
 #include "MouseTracker.h"
 
 MouseTracker* MouseTracker::getInstance(void)
@@ -35,6 +34,8 @@ void MouseTracker::update(void)
             &maskReturn
         );
     }
+
+    XCloseDisplay(d);
 }
 
 MouseTracker::MouseTracker(void)
