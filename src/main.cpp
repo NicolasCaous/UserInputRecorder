@@ -6,14 +6,17 @@
 #include "../include/exception"
 #include "../include/boost/chrono.hpp"
 #include "../include/boost/thread/thread.hpp"
+#include "./Utils/Timer.cpp"
 #include "MouseTracker.h"
 #include "ThreadController/ThreadController.h"
 
 void funcao(std::vector< void* >& params)
 {
+    Timer* timer = (Timer*) params[params.size() - 1];
     while (true)
     {
-        boost::this_thread::sleep_for(boost::chrono::milliseconds(*((int*) params[0])));
+        boost::this_thread::sleep_for(boost::chrono::milliseconds(*((int*) params[0]) - ((int) (timer->elapsed()) * 1000)));
+        timer->reset();
         MouseTracker* mt1 = MouseTracker::get_instance();
         MouseTracker* mt2 = MouseTracker::get_instance();
 
@@ -26,7 +29,7 @@ void funcao(std::vector< void* >& params)
 int main(int argc, char ** argv) {
 
     std::vector< void* > params;
-    int x = 2;
+    int x = 200;
     params.push_back(&x);
     ThreadController* tc = ThreadController::get_instance();
 

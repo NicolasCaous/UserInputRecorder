@@ -1,6 +1,7 @@
 #include "ThreadController.h"
 #include "../../include/stdexcept"
 #include "../../include/iostream"
+#include "../Utils/Timer.cpp"
 
 ThreadController* ThreadController::get_instance(void)
 {
@@ -92,6 +93,8 @@ void ThreadController::create_thread(
     {
         (*this->thread_groups)[group] = new boost::thread_group;
     }
+    Timer* timer = new Timer;
+    params.push_back(timer);
 
     boost::thread* new_thread = new boost::thread( function, boost::ref(params));
     (*this->threads)[name] = new_thread;
