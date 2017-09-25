@@ -15,7 +15,7 @@ void funcao(std::vector< void* >& params)
     Timer* timer = (Timer*) params[params.size() - 1];
     while (true)
     {
-        boost::this_thread::sleep_for(boost::chrono::milliseconds(*((int*) params[0]) - ((int) (timer->elapsed()) * 1000)));
+        boost::this_thread::sleep_for(boost::chrono::milliseconds(*((int*) params[0]) - timer->elapsed()));
         timer->reset();
         MouseTracker* mt1 = MouseTracker::get_instance();
         MouseTracker* mt2 = MouseTracker::get_instance();
@@ -36,7 +36,7 @@ int main(int argc, char ** argv) {
     tc->create_thread("1", "num", &funcao, params);
     sleep(2);
     tc->close_all_threads();
-    std::cout << ThreadController::active() << std::endl;
+    std::cout << ((Timer*) params[params.size()-1])->elapsed() << std::endl;
 
     /*Display *d = XOpenDisplay(0);
 
