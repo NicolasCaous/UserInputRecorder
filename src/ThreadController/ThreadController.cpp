@@ -23,15 +23,25 @@ void ThreadController::print(std::string s)
 
 void ThreadController::close_all_threads(void)
 {
-    std::map< std::string, boost::thread_group* >::iterator it;
-    for (it = this->thread_groups->begin(); it != this->thread_groups->end(); it++)
+    std::map< std::string, boost::thread* >::iterator it;
+    for (it = this->threads->begin(); it != this->threads->end(); it++)
     {
-        it->second->interrupt_all();
-        it->second->join_all();
+        it->second->interrupt();
+        it->second->join();
+        std::map< std::string, boost::thread_group* >::iterator it2;
+        for (it2 = this->thread_groups->begin(); it2 != this->thread_groups->end(); it2++)
+        {
+            it2->second->remove_thread(it->second);
+        }
         delete it->second;
     }
-    this->thread_groups->clear();
     this->threads->clear();
+    std::map< std::string, boost::thread_group* >::iterator it2;
+    for (it2 = this->thread_groups->begin(); it2 != this->thread_groups->end(); it2++)
+    {
+        delete it2->second;
+    }
+    this->thread_groups->clear();
     delete this->thread_groups;
     delete this->threads;
     ThreadController::THREAD_CONTROLLER = NULL;

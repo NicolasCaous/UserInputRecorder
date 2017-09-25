@@ -33,7 +33,6 @@ int main(int argc, char ** argv) {
     tc->create_thread("1", "num", &funcao, params);
     sleep(2);
     tc->close_all_threads();
-    sleep(1);
     std::cout << ThreadController::active() << std::endl;
 
     /*Display *d = XOpenDisplay(0);
