@@ -1,48 +1,42 @@
-#include "../include/cstddef"
-#include "../include/X11/Xlib.h"
+#include "../../include/cstddef"
+#include "../../include/X11/Xlib.h"
 #include "MouseTracker.h"
 
-MouseTracker* MouseTracker::get_instance(void)
-{
-    if (MouseTracker::tracker == NULL)
-    {
+MouseTracker* MouseTracker::getInstance(void) {
+    if (MouseTracker::tracker == NULL) {
         MouseTracker::tracker = new MouseTracker;
     }
     return MouseTracker::tracker;
 }
 
-XY MouseTracker::get_coordinates(void)
-{
+XY MouseTracker::getCoordinates(void) {
     this->update();
     return this->coordinates;
 }
 
-void MouseTracker::update(void)
-{
+void MouseTracker::update(void) {
     Display *d = XOpenDisplay(0);
 
-    if (d)
-    {
-        unsigned int mask_return;
+    if (d) {
+        unsigned int maskReturn;
         int winx, winy;
-        Window window_returned;
+        Window windowReturned;
         Window root;
 
         root = XRootWindow(d, 0);
 
         XQueryPointer(
-            d, root, &window_returned,
-            &window_returned, &this->coordinates.x,
+            d, root, &windowReturned,
+            &windowReturned, &this->coordinates.x,
             &this->coordinates.y, &winx, &winy,
-            &mask_return
+            &maskReturn
         );
     }
 
     XCloseDisplay(d);
 }
 
-MouseTracker::MouseTracker(void)
-{
+MouseTracker::MouseTracker(void) {
     this->coordinates = *(new XY);
     this->update();
 }

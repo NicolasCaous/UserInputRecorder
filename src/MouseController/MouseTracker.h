@@ -1,13 +1,12 @@
-#include "./Utils/XY.h"
+#include "../Utils/XY.h"
 
 #ifndef MOUSETRACKER_H
 #define MOUSETRACKER_H
 
-class MouseTracker
-{
+class MouseTracker {
     public:
-        static MouseTracker* get_instance(void);
-        XY get_coordinates(void);
+        static MouseTracker* getInstance(void);
+        XY getCoordinates(void);
     private:
         void update(void);
         MouseTracker(void);
