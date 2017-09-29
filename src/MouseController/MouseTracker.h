@@ -5,12 +5,14 @@
 
 class MouseTracker {
     public:
-        static MouseTracker* getInstance(void);
-        XY getCoordinates(void);
+        static MouseTracker& getInstance(void);
+        ~MouseTracker(void);
+        XY getCoordinates(void) const;
     private:
+        MouseTracker() {}
+        MouseTracker(const MouseTracker&);
+        MouseTracker& operator= (const MouseTracker&);
         void update(void);
-        MouseTracker(void);
-        static MouseTracker* tracker;
         XY coordinates;
     protected:
 };

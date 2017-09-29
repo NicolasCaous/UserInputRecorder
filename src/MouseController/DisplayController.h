@@ -5,11 +5,13 @@
 
 class DisplayController {
     public:
-        static DisplayController* getInstance(void);
-        Display* getDisplay(void);
+        static DisplayController& getInstance(void);
+        ~DisplayController(void);
+        Display* getDisplay(void) const;
     private:
-        DisplayController(void);
-        static DisplayController* displayController;
+        DisplayController() {}
+        DisplayController(const DisplayController&);
+        DisplayController& operator= (const DisplayController&);
         Display* display;
     protected:
 };

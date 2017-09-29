@@ -9,6 +9,7 @@
 #include "../include/X11/Xlib.h"
 #include "./Utils/Timer.cpp"
 #include "./Utils/XY.h"
+#include "MouseController/DisplayController.h"
 #include "MouseController/MouseTracker.h"
 #include "ThreadController/ThreadController.h"
 
@@ -17,15 +18,15 @@ std::vector< XY > track;
 void gravar(std::vector< void* >& params)
 {
     Timer* timer = (Timer*) params[params.size() - 1];
-    MouseTracker* mt1 = MouseTracker::getInstance();
+    const MouseTracker& mt1 = MouseTracker::getInstance();
     XY anterior;
     while (true)
     {
         boost::this_thread::sleep_for(boost::chrono::milliseconds(*((int*) params[0]) - timer->elapsed()));
         timer->reset();
         XY now;
-            now.x = mt1->getCoordinates().x;
-            now.y = mt1->getCoordinates().y;
+            now.x = mt1.getCoordinates().x;
+            now.y = mt1.getCoordinates().y;
         /*if (track.size() == 0)
         {
             anterior.x = now.x;
@@ -53,8 +54,6 @@ void reproduzir(std::vector< void* >& params)
     Display *d = XOpenDisplay(0);
     Window root_window;
     root_window = XRootWindow(d, 0);
-
-    MouseTracker* mt = MouseTracker::getInstance();
 
     /*XWarpPointer(
                 d, None, root_window,
@@ -89,17 +88,16 @@ int main(int argc, char ** argv) {
     std::vector< void* > params;
     int x = 20;
     params.push_back(&x);
-    ThreadController* tc = ThreadController::getInstance();
+    const ThreadController& tc = ThreadController::getInstance();
 
     sleep(1);
-    tc->createThread("1", "num", &gravar, params);
+    tc.createThread("1", "num", &gravar, params);
     sleep(5);
-    tc->closeThread("1");
-    tc->createThread("2", "num", &reproduzir, params);
+    tc.closeThread("1");
+    tc.createThread("2", "num", &reproduzir, params);
     sleep(5);
-    tc->closeThread("2");
-    sleep(5);
-    tc->closeAllThreads();
+    tc.closeThread("2");
+    sleep(2);
     std::cout << ((Timer*) params[params.size()-1])->elapsed() << std::endl;
 
     return 0;

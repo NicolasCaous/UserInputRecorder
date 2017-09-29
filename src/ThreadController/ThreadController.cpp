@@ -3,22 +3,16 @@
 #include "../../include/iostream"
 #include "../Utils/Timer.cpp"
 
-ThreadController* ThreadController::getInstance(void) {
-    if (ThreadController::THREAD_CONTROLLER == NULL) {
-        ThreadController::THREAD_CONTROLLER = new ThreadController;
+ThreadController& ThreadController::getInstance(void) {
+    static ThreadController instance;
+    if (instance.threadGroups == NULL || instance.threads == NULL) {
+        instance.threadGroups = new std::map< std::string, boost::thread_group* >;
+        instance.threads = new std::map< std::string, boost::thread* >;
     }
-    return ThreadController::THREAD_CONTROLLER;
+    return instance;
 }
 
-bool ThreadController::active(void) {
-    return (ThreadController::THREAD_CONTROLLER != NULL);
-}
-
-void ThreadController::print(std::string s) {
-    std::cout << s << std::endl;
-}
-
-void ThreadController::closeAllThreads(void) {
+ThreadController::~ThreadController(void) {
     std::map< std::string, boost::thread* >::iterator it;
     for (it = this->threads->begin(); it != this->threads->end(); it++) {
         it->second->interrupt();
@@ -38,11 +32,9 @@ void ThreadController::closeAllThreads(void) {
     this->threadGroups->clear();
     delete this->threadGroups;
     delete this->threads;
-    ThreadController::THREAD_CONTROLLER = NULL;
-    delete this;
 }
 
-void ThreadController::closeThread(std::string name) {
+void ThreadController::closeThread(std::string name) const {
     if (this->threads->count(name) == 0) {
         throw std::invalid_argument( "Thread dont exist" );
     }
@@ -57,7 +49,7 @@ void ThreadController::closeThread(std::string name) {
     delete thread;
 }
 
-boost::thread* ThreadController::getThread(std::string name) {
+boost::thread* ThreadController::getThread(std::string name) const {
     if (this->threads->count(name) == 0) {
         throw std::invalid_argument( "Thread dont exist" );
     }
@@ -69,7 +61,7 @@ void ThreadController::createThread(
     std::string group,
     void function(std::vector< void* >&),
     std::vector< void* >& params
-) {
+) const {
     if (this->threads->count(name) == 1) {
         throw std::invalid_argument( "Thread already initialized" );
     }
@@ -84,10 +76,3 @@ void ThreadController::createThread(
     (*this->threads)[name] = newThread;
     (*this->threadGroups)[group]->add_thread(newThread);
 }
-
-ThreadController::ThreadController(void) {
-    this->threadGroups = new std::map< std::string, boost::thread_group* >;
-    this->threads = new std::map< std::string, boost::thread* >;
-}
-
-ThreadController* ThreadController::THREAD_CONTROLLER;
