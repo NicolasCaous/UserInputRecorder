@@ -9,7 +9,7 @@ class MouseTracker {
         ~MouseTracker(void);
         XY getCoordinates(void) const;
     private:
-        MouseTracker() {}
+        MouseTracker(void);
         MouseTracker(const MouseTracker&);
         MouseTracker& operator= (const MouseTracker&);
         void update(void);

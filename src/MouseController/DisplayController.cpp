@@ -5,16 +5,17 @@
 
 DisplayController& DisplayController::getInstance(void) {
     static DisplayController instance;
-    if (instance.display == NULL) {
-        instance.display = XOpenDisplay(0);
-    }
     return instance;
 }
 
-DisplayController::~DisplayController() {
+DisplayController::~DisplayController(void) {
     XCloseDisplay(DisplayController::getInstance().getDisplay());
 }
 
 Display* DisplayController::getDisplay(void) const {
     return this->display;
+}
+
+DisplayController::DisplayController(void) {
+    this->display = XOpenDisplay(0);
 }

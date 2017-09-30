@@ -15,6 +15,9 @@ XY MouseTracker::getCoordinates(void) const {
     return this->coordinates;
 }
 
+MouseTracker::MouseTracker(void) {
+}
+
 void MouseTracker::update(void) {
     const DisplayController& displayController = DisplayController::getInstance();
     Display* d = displayController.getDisplay();

@@ -15,7 +15,7 @@ class ThreadController {
         boost::thread* getThread(std::string name) const;
         void createThread(std::string name, std::string group, void function(std::vector< void* >&), std::vector< void* >& params) const;
     private:
-        ThreadController() {}
+        ThreadController();
         ThreadController(const ThreadController&);
         ThreadController& operator= (const ThreadController&);
         std::map< std::string, boost::thread_group* >* threadGroups;

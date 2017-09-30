@@ -5,10 +5,6 @@
 
 ThreadController& ThreadController::getInstance(void) {
     static ThreadController instance;
-    if (instance.threadGroups == NULL || instance.threads == NULL) {
-        instance.threadGroups = new std::map< std::string, boost::thread_group* >;
-        instance.threads = new std::map< std::string, boost::thread* >;
-    }
     return instance;
 }
 
@@ -75,4 +71,9 @@ void ThreadController::createThread(
     boost::thread* newThread = new boost::thread( function, boost::ref(params));
     (*this->threads)[name] = newThread;
     (*this->threadGroups)[group]->add_thread(newThread);
+}
+
+ThreadController::ThreadController(void) {
+    this->threadGroups = new std::map< std::string, boost::thread_group* >;
+    this->threads = new std::map< std::string, boost::thread* >;
 }

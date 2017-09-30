@@ -9,7 +9,7 @@ class DisplayController {
         ~DisplayController(void);
         Display* getDisplay(void) const;
     private:
-        DisplayController() {}
+        DisplayController(void);
         DisplayController(const DisplayController&);
         DisplayController& operator= (const DisplayController&);
         Display* display;
