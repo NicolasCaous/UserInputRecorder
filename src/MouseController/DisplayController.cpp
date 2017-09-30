@@ -16,6 +16,10 @@ Display* DisplayController::getDisplay(void) const {
     return this->display;
 }
 
+void DisplayController::flush(void) const {
+    XFlush(this->display);
+}
+
 DisplayController::DisplayController(void) {
     this->display = XOpenDisplay(0);
 }

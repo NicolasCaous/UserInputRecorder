@@ -8,6 +8,7 @@ class DisplayController {
         static DisplayController& getInstance(void);
         ~DisplayController(void);
         Display* getDisplay(void) const;
+        void flush(void) const;
     private:
         DisplayController(void);
         DisplayController(const DisplayController&);

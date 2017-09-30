@@ -2,21 +2,23 @@
 #include "../../include/vector"
 #include "../Utils/XY.h"
 
-#ifndef MOUSERECORDER_H
-#define MOUSERECORDER_H
+#ifndef MOUSEPLAYER_H
+#define MOUSEPLAYER_H
 
-class MouseRecorder {
+class MousePlayer {
     public:
-        MouseRecorder(int threadClock);
-        ~MouseRecorder(void);
+        MousePlayer(std::vector< XY > track, int threadClock);
+        ~MousePlayer(void);
         void start(void);
         void end(void);
+        void join(void);
+        bool isRunning(void);
         static void endAll(void);
         std::vector< XY > getTrack(void);
         int getClock(void);
     private:
         static void threadFunction(std::vector< void* >& params);
-        static std::vector< MouseRecorder* > recorders;
+        static std::vector< MousePlayer* > players;
         static std::string threadGroup;
         static int instances;
         std::string threadName;
