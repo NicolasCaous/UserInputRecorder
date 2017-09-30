@@ -18,8 +18,8 @@ class ThreadController {
         ThreadController();
         ThreadController(const ThreadController&);
         ThreadController& operator= (const ThreadController&);
-        std::map< std::string, boost::thread_group* >* threadGroups;
-        std::map< std::string, boost::thread* >* threads;
+        std::map< std::string, boost::thread_group* > threadGroups;
+        std::map< std::string, boost::thread* > threads;
     protected:
 };
 

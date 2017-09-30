@@ -11,11 +11,12 @@
 #include "./Utils/XY.h"
 #include "MouseController/DisplayController.h"
 #include "MouseController/MouseTracker.h"
+#include "MouseController/MouseRecorder.h"
 #include "ThreadController/ThreadController.h"
 
 std::vector< XY > track;
 
-void gravar(std::vector< void* >& params)
+/*void gravar(std::vector< void* >& params)
 {
     Timer* timer = (Timer*) params[params.size() - 1];
     const MouseTracker& mt1 = MouseTracker::getInstance();
@@ -43,9 +44,9 @@ void gravar(std::vector< void* >& params)
 
             anterior.x = now.x;
             anterior.y = now.y;
-        }*/ track.push_back(now);
+        }*\/ track.push_back(now);
     }
-}
+}*/
 
 void reproduzir(std::vector< void* >& params)
 {
@@ -86,14 +87,19 @@ void reproduzir(std::vector< void* >& params)
 int main(int argc, char ** argv) {
 
     std::vector< void* > params;
-    int x = 20;
+    int x = 10;
     params.push_back(&x);
     const ThreadController& tc = ThreadController::getInstance();
 
     sleep(1);
-    tc.createThread("1", "num", &gravar, params);
+    MouseRecorder mr = MouseRecorder();
+    mr.start();
+    /*tc.createThread("1", "num", &gravar, params);*/
     sleep(5);
-    tc.closeThread("1");
+    mr.end();
+    std::cout << "PAROU" << std::endl;
+    track = mr.getTrack();
+    /*tc.closeThread("1");*/
     tc.createThread("2", "num", &reproduzir, params);
     sleep(5);
     tc.closeThread("2");
