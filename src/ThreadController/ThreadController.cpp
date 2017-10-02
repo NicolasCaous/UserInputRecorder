@@ -4,8 +4,11 @@
 #include "../Utils/Timer.cpp"
 
 ThreadController& ThreadController::getInstance(void) {
-    static ThreadController instance;
-    return instance;
+    static ThreadController* instance;
+    if (instance == NULL) {
+        instance = new ThreadController;
+    }
+    return *instance;
 }
 
 ThreadController::~ThreadController(void) {

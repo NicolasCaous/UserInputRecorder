@@ -4,8 +4,11 @@
 #include "../../include/X11/Xlib.h"
 
 DisplayController& DisplayController::getInstance(void) {
-    static DisplayController instance;
-    return instance;
+    static DisplayController* instance;
+    if (instance == NULL) {
+        instance = new DisplayController;
+    }
+    return *instance;
 }
 
 DisplayController::~DisplayController(void) {

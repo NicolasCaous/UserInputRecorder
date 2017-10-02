@@ -1,20 +1,20 @@
 #include "../../include/string"
 #include "../../include/vector"
-#include "../Utils/XY.h"
+#include "PointerState.h"
 
 #ifndef MOUSEPLAYER_H
 #define MOUSEPLAYER_H
 
 class MousePlayer {
     public:
-        MousePlayer(std::vector< XY > track, int threadClock);
+        MousePlayer(std::vector< PointerState > track, int threadClock);
         ~MousePlayer(void);
         void start(void);
         void end(void);
         void join(void);
         bool isRunning(void);
         static void endAll(void);
-        std::vector< XY > getTrack(void);
+        std::vector< PointerState > getTrack(void);
         int getClock(void);
     private:
         static void threadFunction(std::vector< void* >& params);
@@ -23,7 +23,7 @@ class MousePlayer {
         static int instances;
         std::string threadName;
         std::vector< void* > params;
-        std::vector< XY > track;
+        std::vector< PointerState > track;
         int threadMili;
         int threadClock;
         bool running;

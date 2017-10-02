@@ -3,18 +3,17 @@
 #include "../../include/algorithm"
 #include "../../include/boost/lexical_cast.hpp"
 #include "../ThreadController/ThreadController.h"
-#include "../Utils/XY.h"
+#include "PointerState.h"
 #include "../Utils/Timer.cpp"
 #include "DisplayController.h"
 #include "MouseRecorder.h"
-#include "MouseTracker.h"
 
 MouseRecorder::MouseRecorder(int threadClock) {
     MouseRecorder::instances++;
     MouseRecorder::recorders.push_back(this);
     this->threadName = MouseRecorder::threadGroup + boost::lexical_cast< std::string >(MouseRecorder::instances);
     this->params = std::vector< void* >();
-    this->track = std::vector< XY >();
+    this->track = std::vector< PointerState >();
     this->threadClock = threadClock;
     this->threadMili = 1000 / threadClock;
     this->params.push_back(&this->threadMili);
@@ -60,7 +59,7 @@ void MouseRecorder::endAll(void) {
     }
 }
 
-std::vector< XY > MouseRecorder::getTrack(void) {
+std::vector< PointerState > MouseRecorder::getTrack(void) {
     return this->track;
 }
 
@@ -70,13 +69,12 @@ int MouseRecorder::getClock(void) {
 
 void MouseRecorder::threadFunction(std::vector< void* >& params) {
     Timer* timer = (Timer*) params[params.size() - 1];
-    const MouseTracker& mt = MouseTracker::getInstance();
 
     while (true) {
         boost::this_thread::sleep_for(boost::chrono::milliseconds(*((int*) params[0]) - timer->elapsed()));
         timer->reset();
 
-        ((std::vector< XY >*) params[1])->push_back(mt.getCoordinates());
+        ((std::vector< PointerState >*) params[1])->push_back(PointerState());
     }
 }
 
