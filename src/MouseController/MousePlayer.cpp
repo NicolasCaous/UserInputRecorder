@@ -9,6 +9,7 @@
 #include "MouseEventListener.h"
 #include "MousePlayer.h"
 #include "MouseClicker.h"
+#include "MouseMover.h"
 
 MousePlayer::MousePlayer(std::vector< PointerState > track, int threadClock) {
     MousePlayer::instances++;
@@ -40,7 +41,6 @@ MousePlayer::~MousePlayer(void) {
 }
 
 void MousePlayer::start(void) {
-    delete &MouseEventListener::getInstance();
     ThreadController::getInstance().createThread(
         this->threadName,
         this->threadGroup,
@@ -83,8 +83,6 @@ int MousePlayer::getClock(void) {
 
 void MousePlayer::threadFunction(std::vector< void* >& params) {
     Timer* timer = (Timer*) params[params.size() - 1];
-    Window root_window;
-    root_window = XRootWindow(DisplayController::getInstance().getDisplay(), 0);
     std::vector< PointerState >& vetor = *((std::vector< PointerState >*) params[1]);
 
     bool lb = false;
@@ -95,11 +93,7 @@ void MousePlayer::threadFunction(std::vector< void* >& params) {
         boost::this_thread::sleep_for(boost::chrono::milliseconds(*((int*) params[0]) - timer->elapsed()));
         timer->reset();
 
-        XWarpPointer(
-            DisplayController::getInstance().getDisplay(), None, root_window,
-            0, 0, 0, 0,
-            vetor[i].xy.x, vetor[i].xy.y
-        );
+        MouseMover::move(vetor[i].xy);
         if (vetor[i].lb != lb) {
             lb = vetor[i].lb;
             if (lb) {

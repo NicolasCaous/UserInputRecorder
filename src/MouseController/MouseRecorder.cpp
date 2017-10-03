@@ -7,6 +7,7 @@
 #include "../Utils/Timer.cpp"
 #include "DisplayController.h"
 #include "MouseRecorder.h"
+#include "MouseEventListener.h"
 
 MouseRecorder::MouseRecorder(int threadClock) {
     MouseRecorder::instances++;
@@ -51,6 +52,7 @@ void MouseRecorder::end(void) {
         ThreadController::getInstance().closeThread(this->threadName);
         this->running = false;
     }
+    delete &MouseEventListener::getInstance();
 }
 
 void MouseRecorder::endAll(void) {
