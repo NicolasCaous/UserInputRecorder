@@ -1,2 +1,0 @@
-# mouvermouvermover
-Mouse Movement Recorder
