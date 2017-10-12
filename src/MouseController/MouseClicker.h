@@ -11,6 +11,9 @@ class MouseClicker {
         static void mouseDown(int button);
     private:
         static void mouseButton(int button, bool down);
+        static bool lbState;
+        static bool rbState;
+        static bool mbState;
     protected:
 };
 

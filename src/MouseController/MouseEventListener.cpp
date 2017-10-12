@@ -4,6 +4,7 @@
 #include "../ThreadController/ThreadController.h"
 #include "DisplayController.h"
 #include "MouseEventListener.h"
+#include "MouseClicker.h"
 
 MouseEventListener& MouseEventListener::getInstance(void) {
     static MouseEventListener* instance;
@@ -72,7 +73,8 @@ MouseEventListener::MouseEventListener(void) {
 
 void MouseEventListener::threadFunction(std::vector< void* >& params) {
 
-    Display* display = DisplayController::getInstance().getDisplay();
+    const DisplayController& dc = DisplayController::getInstance();
+    Display* display = dc.getDisplay();
     XEvent xevent;
     Window window;
 
@@ -83,7 +85,7 @@ void MouseEventListener::threadFunction(std::vector< void* >& params) {
 
     XGrabPointer(display,
                  window,
-                 1,
+                 True,
                  PointerMotionMask | ButtonPressMask | ButtonReleaseMask ,
                  GrabModeAsync,
                  GrabModeAsync,
@@ -97,6 +99,7 @@ void MouseEventListener::threadFunction(std::vector< void* >& params) {
         }
 
         switch (xevent.type) {
+            XSendEvent(display, PointerWindow, True, 0xfff, &xevent);
             case MotionNotify:
                     ((XY*) params[7])->x = xevent.xmotion.x_root;
                     ((XY*) params[7])->y = xevent.xmotion.y_root;
@@ -106,6 +109,18 @@ void MouseEventListener::threadFunction(std::vector< void* >& params) {
                         case Button1:
                             *((bool*) params[0]) = true;
                             *((bool*) params[1]) = true;
+                            XUngrabPointer(display, CurrentTime);
+                            MouseClicker::mouseDown(Button1);
+                            XSync(display, true);
+                            XGrabPointer(display,
+                                window,
+                                True,
+                                PointerMotionMask | ButtonPressMask | ButtonReleaseMask ,
+                                GrabModeAsync,
+                                GrabModeAsync,
+                                None,
+                                None,
+                                CurrentTime);
                         break;
                         case Button2:
                             *((bool*) params[2]) = true;
