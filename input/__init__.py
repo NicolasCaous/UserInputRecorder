@@ -1,6 +1,7 @@
 from ._input_listener import InputListener
 from copy import deepcopy
 from pynput import mouse, keyboard
+import math
 import time
 import threading
 
@@ -45,8 +46,8 @@ class InputRecorder:
 class InputPlayer:
 
     def __init__(self, recorder, interpolate=False):
-        self.path = recorder.state["path"]
         self.rate = recorder.state["rate"]
+        self.path = recorder.state["path"][:-math.ceil(self.rate/6)]
         self.playing = False
         self.mouse = mouse.Controller()
         self.keyboard = keyboard.Controller()
