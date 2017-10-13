@@ -1,12 +1,11 @@
-from mouse import MouseRecorder, MouseEventListener
+from input import InputRecorder
 import time
 
-with MouseEventListener() as mel:
-    recorder = MouseRecorder(1)
-    recorder.start()
-    time.sleep(5)
-    recorder.join()
-    mel.printA()
+recorder = InputRecorder(60)
+recorder.start()
+time.sleep(5)
+recorder.join()
+print (len(recorder.state["path"]))
 
 #pyautogui.MINIMUM_DURATION = 0
 #pyautogui.MINIMUM_SLEEP = 0
