@@ -1,13 +1,13 @@
 from ._input_listener import InputListener
 from copy import deepcopy
-from pynput.mouse import Controller
-from threading import Thread
+from pynput import mouse, keyboard
 import time
+import threading
 
 class InputRecorder:
 
     def __init__(self, rate=60):
-        self.mouse = Controller()
+        self.mouse = mouse.Controller()
         self.rate = rate
         self.recording = False
         self.state = {"rate": rate, "path": []}
@@ -15,7 +15,7 @@ class InputRecorder:
     def start(self):
         self.before = time.time()
         self.recording = True
-        self.thread = Thread(target=self.update, args=())
+        self.thread = threading.Thread(target=self.update, args=())
         self.thread.start()
         return self
 
@@ -41,3 +41,52 @@ class InputRecorder:
 
     def getInputState(self, input_listener):
         return {"pos": self.mouse.position, "events": deepcopy(input_listener.get_events())}
+
+class InputPlayer:
+
+    def __init__(self, recorder, interpolate=False):
+        self.path = recorder.state["path"]
+        self.rate = recorder.state["rate"]
+        self.playing = False
+        self.mouse = mouse.Controller()
+        self.keyboard = keyboard.Controller()
+
+    def start(self):
+        self.before = time.time()
+        self.playing = True
+        self.thread = threading.Thread(target=self.update, args=())
+        self.thread.start()
+        return self
+
+    def update(self):
+        for state in self.path:
+            if not self.playing:
+                break
+            self.mouse.position = state["pos"]
+            for event in state["events"]:
+                if event["type"] is "click":
+                    self.mouse.position = (event["x"], event["y"])
+                    if event["pressed"]:
+                        self.mouse.press(event["button"])
+                    else:
+                        self.mouse.release(event["button"])
+                elif event["type"] is "scroll":
+                    self.mouse.position = (event["x"], event["y"])
+                    self.mouse.scroll(event["dx"], event["dy"])
+                else:
+                    if event["pressed"]:
+                        self.keyboard.press(event["key"])
+                    else:
+                        self.keyboard.release(event["key"])
+            now = time.time()
+            if not ((1/self.rate) - (now - self.before) < 0):
+                time.sleep((1/self.rate) - (now - self.before))
+            self.before = time.time()
+
+    def stop(self):
+        self.playing = False
+        return self
+
+    def join(self):
+        self.thread.join()
+        return self
