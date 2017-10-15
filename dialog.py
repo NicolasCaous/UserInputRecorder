@@ -39,7 +39,6 @@ class Ui_input_capture_dialog(object):
     def retranslateUi(self, input_capture_dialog):
         self.label.setText(_translate("input_capture_dialog", "Waiting for a Key", None))
 
-
 if __name__ == "__main__":
     import sys
     app = QtGui.QApplication(sys.argv)

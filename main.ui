@@ -35,7 +35,7 @@
    <string>User Input Recorder</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="record_button">
+   <widget class="QPushButton" name="set_record_button">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -60,11 +60,11 @@
      <bool>false</bool>
     </property>
    </widget>
-   <widget class="QPushButton" name="play_button">
+   <widget class="QPushButton" name="set_play_button">
     <property name="geometry">
      <rect>
-      <x>170</x>
-      <y>10</y>
+      <x>10</x>
+      <y>50</y>
       <width>141</width>
       <height>31</height>
      </rect>
@@ -76,10 +76,10 @@
    <widget class="QTextBrowser" name="text_area">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>50</y>
-      <width>301</width>
-      <height>161</height>
+      <x>170</x>
+      <y>10</y>
+      <width>141</width>
+      <height>201</height>
      </rect>
     </property>
     <property name="html">
@@ -88,6 +88,79 @@
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:18px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QSlider" name="slider_frequency">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>110</y>
+      <width>141</width>
+      <height>29</height>
+     </rect>
+    </property>
+    <property name="minimum">
+     <number>30</number>
+    </property>
+    <property name="maximum">
+     <number>200</number>
+    </property>
+    <property name="sliderPosition">
+     <number>60</number>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+    <property name="tickPosition">
+     <enum>QSlider::TicksAbove</enum>
+    </property>
+    <property name="tickInterval">
+     <number>10</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_frequency">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>90</y>
+      <width>101</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Frequency</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="recording_button">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>140</y>
+      <width>81</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>recording</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="playing_button">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>140</y>
+      <width>81</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>playing</string>
     </property>
    </widget>
   </widget>

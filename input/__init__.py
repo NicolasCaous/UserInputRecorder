@@ -21,13 +21,13 @@ class InputRecorder:
         return self
 
     def update(self):
-        with InputListener() as il:
-            while self.recording:
-                self.state["path"].append(self.getInputState(il))
-                now = time.time()
-                if not ((1/self.rate) - (now - self.before) < 0):
-                    time.sleep((1/self.rate) - (now - self.before))
-                self.before = time.time()
+        listener = InputListener()
+        while self.recording:
+            self.state["path"].append(self.getInputState(listener))
+            now = time.time()
+            if not ((1/self.rate) - (now - self.before) < 0):
+                time.sleep((1/self.rate) - (now - self.before))
+            self.before = time.time()
 
     def stop(self):
         self.recording = False
@@ -47,12 +47,13 @@ class InputPlayer:
 
     def __init__(self, recorder, interpolate=False):
         self.rate = recorder.state["rate"]
-        self.path = recorder.state["path"][:-math.ceil(self.rate/6)]
+        self.path = recorder.state["path"][math.ceil(self.rate/6):-math.ceil(self.rate/6)]
         self.playing = False
         self.mouse = mouse.Controller()
         self.keyboard = keyboard.Controller()
 
-    def start(self):
+    def start(self, stop_method):
+        self.stop_method = stop_method
         self.before = time.time()
         self.playing = True
         self.thread = threading.Thread(target=self.update, args=())
@@ -83,11 +84,15 @@ class InputPlayer:
             if not ((1/self.rate) - (now - self.before) < 0):
                 time.sleep((1/self.rate) - (now - self.before))
             self.before = time.time()
+        self.stop_method()
 
     def stop(self):
         self.playing = False
         return self
 
     def join(self):
-        self.thread.join()
+        try:
+            self.thread.join()
+        except:
+            return self
         return self
